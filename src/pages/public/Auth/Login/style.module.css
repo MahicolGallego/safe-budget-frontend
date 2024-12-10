@@ -1,0 +1,42 @@
+.formContainer {
+  width: 100%;
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  max-width: 400px; /* Ancho máximo del formulario */
+  margin: 0 auto; /* Centrar el formulario */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+.formLogin,
+.formContainer {
+  display: flex;
+  width: 80%;
+  align-items: center;
+  flex-direction: column;
+}
+
+.input {
+  width: 100%;
+}
+
+.LoginButton {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #1890ff;
+  background-color: white;
+  text-decoration: none;
+  border: #107bff 1px solid;
+  transition: all 0.3s ease;
+}
+
+.LoginButton:hover {
+  color: white;
+  border: #107bff 1px solid;
+  transform: scale(1.05); /* Un pequeño efecto de agrandamiento */
+}
+
+.LoginButton:focus {
+  outline: none;
+}

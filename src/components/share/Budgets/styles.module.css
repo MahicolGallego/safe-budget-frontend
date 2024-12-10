@@ -1,0 +1,50 @@
+.budgetCardContainer {
+  flex: 1 1 calc(100% / 3 - 30px);
+  display: flex;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 15px;
+  justify-content: space-between;
+  position: relative;
+}
+
+h4 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+h5 {
+  margin: 0;
+}
+
+.budgetCardContainerButtons {
+  display: flex;
+  gap: 5px;
+  position: absolute;
+  bottom: -15px;
+  right: 5px;
+}
+
+.deleteButton {
+  margin-top: auto;
+  background-color: red;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: none;
+}
+
+.budgetCardContainer:hover,
+.editButton:hover,
+.deleteButton:hover {
+  transform: scale(1.03);
+}
+
+.deleteButton:hover {
+  background-color: red !important;
+}
+
+.editButton:focus,
+.deleteButton:focus {
+  outline: none;
+}

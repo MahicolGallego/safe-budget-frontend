@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  gap: 30px;
+  box-sizing: border-box;
+}
+
+.imageContainer {
+  flex: 0 1 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.textContainer {
+  flex: 0 1 45%;
+  display: flex;
+  flex-direction: column; /* Los elementos dentro se colocan en columna */
+  justify-content: center; /* Centra los elementos verticalmente */
+  align-items: center;
+}
+
+.containerButtons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.navLinkButton {
+  display: flex;
+  gap: 20;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #1890ff;
+  color: gray;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.navLinkButton:hover {
+  background-color: #107bff;
+  color: white;
+}
+
+.navLinkButton:active {
+  opacity: 0.7;
+}

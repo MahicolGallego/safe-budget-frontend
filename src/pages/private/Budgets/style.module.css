@@ -1,0 +1,36 @@
+.budgetsContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.createBudgetButton {
+  background-color: #00b45a;
+  transition: all 0.2 ease-in-out;
+  box-shadow: none;
+}
+
+.createBudgetButton:hover {
+  background-color: #009e4c !important;
+  border: none;
+  transform: scale(1.03);
+}
+
+.createBudgetButton:focus {
+  outline: none;
+}
+
+.BudgetsContainer {
+  width: 100%;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
