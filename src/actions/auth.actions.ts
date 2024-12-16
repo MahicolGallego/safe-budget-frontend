@@ -35,3 +35,18 @@ export const authLogin = async (email: string, password: string) => {
     return null;
   }
 };
+
+export const authVerifyToken = async (
+  token: string
+): Promise<{ token_is_valid: boolean }> => {
+  try {
+    const { data } = await BudgetsApi.post<{ token_is_valid: boolean }>(
+      "auth/verify",
+      { token }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { token_is_valid: false };
+  }
+};
