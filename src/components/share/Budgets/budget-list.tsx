@@ -1,6 +1,20 @@
-import React from "react";
-import { IBudgetResponse } from "../../../constants/interfaces/api-responses/budget.responses.interfaces";
+import { IBudgetList } from "../../../constants/interfaces/for-components/budget-list.interface";
+import { BudgetCard } from "./budget-card";
 
-export const BudgetList = ({ budgets }: { budgets: IBudgetResponse[] }) => {
-  return <div> {!budgets.length ? true : "No budgets"}</div>;
+export const BudgetList = ({
+  budgets,
+  updateFunction,
+  deleteFunction,
+}: IBudgetList) => {
+  return (
+    <>
+      {...budgets.map((budget) => (
+        <BudgetCard
+          budget={budget}
+          updateFunction={updateFunction}
+          deleteFunction={deleteFunction}
+        />
+      ))}
+    </>
+  );
 };

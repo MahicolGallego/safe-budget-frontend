@@ -5,8 +5,8 @@ export interface IBudgetResponse {
   id: string;
   name: string;
   amount: number;
-  start_date: string;
-  end_date: string;
+  start_date: Date | string;
+  end_date: Date | string;
   status: budgetStatus;
   category: ICategoryResponse;
 }

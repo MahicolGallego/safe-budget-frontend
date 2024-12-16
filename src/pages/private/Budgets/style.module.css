@@ -14,11 +14,13 @@
 .createBudgetButton {
   background-color: #00b45a;
   transition: all 0.2 ease-in-out;
+  color: white;
   box-shadow: none;
 }
 
 .createBudgetButton:hover {
   background-color: #009e4c !important;
+  color: white !important;
   border: none;
   transform: scale(1.03);
 }

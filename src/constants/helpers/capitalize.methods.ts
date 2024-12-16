@@ -3,5 +3,5 @@ export const capitalizeFirstLetter = (value: string) => {
 };
 
 export const capitalizeFull = (value: string) => {
-  return value.split(" ").map(capitalizeFirstLetter).join("");
+  return value.split(" ").map(capitalizeFirstLetter).join(" ");
 };
