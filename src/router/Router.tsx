@@ -7,6 +7,7 @@ import Register from "../pages/public/Auth/Register/RegisterPage";
 import PrivateLayout from "../components/share/Layouts/private/PrivateLayout";
 import Budgets from "../pages/private/Budgets/BudgetsPage";
 import BudgetDetail from "../pages/private/Budget-Detail/BudgetsDetailPage";
+import NotFoundPage from "../pages/public/Not-Found/NotFoundPage";
 
 export const Router = createBrowserRouter([
   {
@@ -52,5 +53,9 @@ export const Router = createBrowserRouter([
         Component: BudgetDetail,
       },
     ],
+  },
+  {
+    path: "*",
+    Component: NotFoundPage,
   },
 ]);
