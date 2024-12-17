@@ -98,10 +98,13 @@ export const useBudgets = () => {
   const handleUpdateBudget = async (
     budgetToUpdate: IBudgetResponse,
     updateBudgetDto: UpdateBudgetDto,
-    form: FormInstance
+    form: FormInstance,
+    handleRequestUpdateBudget: (
+      request: () => Promise<IBudgetResponse | null>
+    ) => Promise<IBudgetResponse | null>
   ) => {
     const BudgetToUpdate = { ...budgetToUpdate };
-    const updatedBudget = (await handleBudgetFormModalOk(() =>
+    const updatedBudget = (await handleRequestUpdateBudget(() =>
       updateBudget(budgetToUpdate.id, updateBudgetDto)
     )) as IBudgetResponse;
     if (updatedBudget === null) {
@@ -113,7 +116,10 @@ export const useBudgets = () => {
       // regresar los campos a su valor anterior por que no se actualizaron
       form.setFieldsValue({
         name: BudgetToUpdate.name,
-        category: BudgetToUpdate.category,
+        category: categories.find(
+          (category) =>
+            category.label.toLowerCase() === BudgetToUpdate.category.name
+        )?.value,
         amount: BudgetToUpdate.amount,
         month: (BudgetToUpdate.start_date as Date).getUTCMonth(),
         other_category: undefined,

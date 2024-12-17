@@ -91,7 +91,7 @@ const Budgets = () => {
             htmlType="submit"
             icon={<SaveOutlined />}
             loading={modalLoading}
-            form="form-create-login"
+            form="form-create-budget"
           >
             Create
           </Button>,
@@ -100,15 +100,13 @@ const Budgets = () => {
         {/*Budget creation form*/}
         <Form
           form={form}
-          className={styles.formLogin}
-          name="form-create-login"
+          name="form-create-budget"
           layout="vertical"
           onFinish={(data) => {
             handleCreateBudget(data, form);
           }}
         >
           <Item
-            className={styles.input}
             name="name"
             label="Name"
             rules={[
@@ -129,7 +127,6 @@ const Budgets = () => {
           </Item>
           <Item
             label="Category"
-            className={styles.input}
             name="category"
             rules={[
               {
@@ -146,9 +143,8 @@ const Budgets = () => {
           </Item>
           {!hiddenOtherCategory && (
             <Item
-              className={styles.input}
               name="other_category"
-              label="new category"
+              label="New category"
               rules={[
                 {
                   required: true,
@@ -156,7 +152,8 @@ const Budgets = () => {
                 },
                 {
                   min: 3,
-                  message: "Name should be at least 3 characters long!",
+                  message:
+                    "Category name should be at least 3 characters long!",
                 },
               ]}
             >
@@ -164,12 +161,16 @@ const Budgets = () => {
             </Item>
           )}
           <Item
-            className={styles.input}
             name="amount"
             label="Amount"
             rules={[
               {
                 required: true,
+                message: "the amount is required!",
+              },
+              {
+                type: "number",
+                min: 0.1,
                 message: "Minimum amount must be at least 0.1",
               },
             ]}
@@ -178,7 +179,7 @@ const Budgets = () => {
               style={{ width: 200 }}
               defaultValue={0}
               max={99999999.99}
-              step={0.01}
+              step={1}
               onChange={() => {}}
               formatter={(value) =>
                 `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -188,7 +189,6 @@ const Budgets = () => {
               addonBefore={<DollarOutlined />}
             />
           </Item>
-          {/*Filters fields*/}
           <Space direction="vertical">
             <Item
               label="Month"
@@ -201,11 +201,7 @@ const Budgets = () => {
                 },
               ]}
             >
-              <Select
-                style={{ width: 120 }}
-                onChange={(value) => handleOtherCategory(value, form)}
-                options={monthListForSelect}
-              />
+              <Select style={{ width: 120 }} options={monthListForSelect} />
             </Item>
             <Text style={{ fontSize: 10, color: "gray" }}>
               *Only current or future months of the current year can be assigned
@@ -213,6 +209,7 @@ const Budgets = () => {
           </Space>
         </Form>
       </Modal>
+      {/*Filters fields*/}
       <div>
         <Space wrap>
           <Space direction="vertical" size="small">
@@ -269,8 +266,10 @@ const Budgets = () => {
           <BudgetList
             // set a new list instead of give the references in memory
             budgets={budgets}
-            updateFunction={handleUpdateBudget}
-            deleteFunction={handleDeleteBudget}
+            categories={categories}
+            monthListForSelect={monthListForSelect}
+            budgetUpdateFunction={handleUpdateBudget}
+            budgetDeleteFunction={handleDeleteBudget}
           />
         </div>
       )}

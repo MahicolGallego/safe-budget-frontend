@@ -3,16 +3,20 @@ import { BudgetCard } from "./budget-card";
 
 export const BudgetList = ({
   budgets,
-  updateFunction,
-  deleteFunction,
+  categories,
+  monthListForSelect,
+  budgetUpdateFunction,
+  budgetDeleteFunction,
 }: IBudgetList) => {
   return (
     <>
       {...budgets.map((budget) => (
         <BudgetCard
           budget={budget}
-          updateFunction={updateFunction}
-          deleteFunction={deleteFunction}
+          categories={categories}
+          monthListForSelect={monthListForSelect}
+          budgetUpdateFunction={budgetUpdateFunction}
+          budgetDeleteFunction={budgetDeleteFunction}
         />
       ))}
     </>
