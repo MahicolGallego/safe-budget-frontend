@@ -1,5 +1,5 @@
 import { BudgetsApi } from "../config/api/BudgetsApi";
-import { ICategoryResponse } from "../constants/interfaces/api-responses/categories.responses.interfaces";
+import { ICategoryResponse } from "../common/interfaces/api-responses/categories.responses.interfaces";
 
 export const findAllCategories = async () => {
   try {

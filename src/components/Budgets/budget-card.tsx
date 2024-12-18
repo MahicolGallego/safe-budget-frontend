@@ -17,15 +17,15 @@ import {
   FormOutlined,
 } from "@ant-design/icons";
 import styles from "./styles.module.css";
-import { IBudgetCard } from "../../../constants/interfaces/for-components/budget-card.interface";
-import { capitalizeFull } from "../../../constants/helpers/capitalize.methods";
-import { monthList } from "../../../constants/arrays-list/months";
-import { useAsyncModal } from "../../../hooks/async-modal/useAsyncModal";
+import { IBudgetCard } from "../../common/interfaces/for-components/budget-card.interface";
+import { capitalizeFull } from "../../common/helpers/capitalize.methods";
+import { monthList } from "../../common/constants/arrays-list/months";
+import { useAsyncModal } from "../../hooks/async-modal/useAsyncModal";
 import { useState } from "react";
-import { IBudgetResponse } from "../../../constants/interfaces/api-responses/budget.responses.interfaces";
-import { formCreateBudget } from "../../../constants/interfaces/for-components/form-create-budget.interface";
-import { UpdateBudgetDto } from "../../../constants/interfaces/api-requests-dtos/update-budget.dto";
-import { budgetStatus } from "../../../constants/enums/budget-status.enum";
+import { IBudgetResponse } from "../../common/interfaces/api-responses/budget.responses.interfaces";
+import { formCreateBudget } from "../../common/interfaces/for-components/form-create-budget.interface";
+import { UpdateBudgetDto } from "../../common/interfaces/api-requests-dtos/update-budget.dto";
+import { budgetStatus } from "../../common/constants/enums/budget-status.enum";
 
 type budgetFormKeys = keyof formCreateBudget;
 const { Item } = Form;

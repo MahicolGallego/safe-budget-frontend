@@ -1,8 +1,8 @@
 import { BudgetsApi } from "../config/api/BudgetsApi";
-import { CreateBudgetDto } from "../constants/interfaces/api-requests-dtos/create-budget.dto";
-import { FilterBudgetDto } from "../constants/interfaces/api-requests-dtos/filter-budget.dto";
-import { UpdateBudgetDto } from "../constants/interfaces/api-requests-dtos/update-budget.dto";
-import { IBudgetResponse } from "../constants/interfaces/api-responses/budget.responses.interfaces";
+import { CreateBudgetDto } from "../common/interfaces/api-requests-dtos/create-budget.dto";
+import { FilterBudgetDto } from "../common/interfaces/api-requests-dtos/filter-budget.dto";
+import { UpdateBudgetDto } from "../common/interfaces/api-requests-dtos/update-budget.dto";
+import { IBudgetResponse } from "../common/interfaces/api-responses/budget.responses.interfaces";
 
 export const createBudget = async (
   createBudgetDto: CreateBudgetDto

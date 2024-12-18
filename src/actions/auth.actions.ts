@@ -1,5 +1,5 @@
 import { BudgetsApi } from "../config/api/BudgetsApi";
-import { ILoginResponse } from "../constants/interfaces/api-responses/auth-responses.interfaces";
+import { ILoginResponse } from "../common/interfaces/api-responses/auth-responses.interfaces";
 
 export const authRegister = async (
   name: string,

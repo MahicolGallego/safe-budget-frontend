@@ -6,9 +6,9 @@
 .content {
   flex: 1;
   height: 100vh;
-  padding: 20px;
   overflow: auto;
   scrollbar-width: none;
+  position: relative;
 }
 
 .sliderContainer,

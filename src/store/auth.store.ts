@@ -5,7 +5,7 @@ import {
   authRegister,
   authVerifyToken,
 } from "../actions/auth.actions";
-import { User } from "../constants/interfaces/entities/user.entity.interfaces";
+import { User } from "../common/interfaces/entities/user.entity.interfaces";
 
 interface AuthState {
   is_authenticated: boolean | null;

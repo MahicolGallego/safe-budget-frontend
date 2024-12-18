@@ -1,0 +1,48 @@
+.containerOnboarding {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  z-index: 99;
+}
+
+.onboardingImageContainer {
+  width: 50%;
+  height: 40%;
+}
+
+.onboardingImage {
+  display: block;
+  height: 100%;
+  object-fit: contain;
+}
+
+.swiper {
+  width: 100%;
+  height: 90%;
+  margin-bottom: 10px;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+
+  /* Center slide text vertically */
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.onboardingParagraph {
+  width: 70%;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}

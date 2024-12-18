@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
-import { monthList } from "../../constants/arrays-list/months";
-import { IForSelect } from "../../constants/interfaces/for-components/select.interface";
-import { ICategoryResponse } from "../../constants/interfaces/api-responses/categories.responses.interfaces";
+import { monthList } from "../../common/constants/arrays-list/months";
+import { IForSelect } from "../../common/interfaces/for-components/select.interface";
+import { ICategoryResponse } from "../../common/interfaces/api-responses/categories.responses.interfaces";
 import { findAllCategories } from "../../actions/categories.actions";
-import { capitalizeFirstLetter } from "../../constants/helpers/capitalize.methods";
+import { capitalizeFirstLetter } from "../../common/helpers/capitalize.methods";
 import { FormInstance } from "antd";
 import { useNotification } from "../notifications/useNotification";
-import { IBudgetResponse } from "../../constants/interfaces/api-responses/budget.responses.interfaces";
+import { IBudgetResponse } from "../../common/interfaces/api-responses/budget.responses.interfaces";
 import {
   createBudget,
   deleteBudget,
   findAllBudgets,
   updateBudget,
 } from "../../actions/budgets.actions";
-import { FilterBudgetDto } from "../../constants/interfaces/api-requests-dtos/filter-budget.dto";
-import { formCreateBudget } from "../../constants/interfaces/for-components/form-create-budget.interface";
+import { FilterBudgetDto } from "../../common/interfaces/api-requests-dtos/filter-budget.dto";
+import { formCreateBudget } from "../../common/interfaces/for-components/form-create-budget.interface";
 import { useAsyncModal } from "../async-modal/useAsyncModal";
-import { UpdateBudgetDto } from "../../constants/interfaces/api-requests-dtos/update-budget.dto";
+import { UpdateBudgetDto } from "../../common/interfaces/api-requests-dtos/update-budget.dto";
 import { parseISO } from "date-fns";
 
 export const useBudgets = () => {

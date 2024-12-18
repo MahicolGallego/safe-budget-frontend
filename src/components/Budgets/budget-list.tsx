@@ -1,4 +1,4 @@
-import { IBudgetList } from "../../../constants/interfaces/for-components/budget-list.interface";
+import { IBudgetList } from "../../common/interfaces/for-components/budget-list.interface";
 import { BudgetCard } from "./budget-card";
 
 export const BudgetList = ({
