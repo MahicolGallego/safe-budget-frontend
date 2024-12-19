@@ -18,7 +18,10 @@ import {
 } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import { IBudgetCard } from "../../common/interfaces/for-components/budget-card.interface";
-import { capitalizeFull } from "../../common/helpers/capitalize.methods";
+import {
+  capitalizeFirstLetter,
+  capitalizeFull,
+} from "../../common/helpers/capitalize.methods";
 import { monthList } from "../../common/constants/arrays-list/months";
 import { useAsyncModal } from "../../hooks/async-modal/useAsyncModal";
 import { useState } from "react";
@@ -26,6 +29,8 @@ import { IBudgetResponse } from "../../common/interfaces/api-responses/budget.re
 import { formCreateBudget } from "../../common/interfaces/for-components/form-create-budget.interface";
 import { UpdateBudgetDto } from "../../common/interfaces/api-requests-dtos/update-budget.dto";
 import { budgetStatus } from "../../common/constants/enums/budget-status.enum";
+import { useNavigate } from "react-router";
+import { formatInputCurrencyString } from "../../common/helpers/formatter-input-currency-string";
 
 type budgetFormKeys = keyof formCreateBudget;
 const { Item } = Form;
@@ -38,10 +43,11 @@ export const BudgetCard = ({
   budgetUpdateFunction,
   budgetDeleteFunction,
 }: IBudgetCard) => {
+  const navigate = useNavigate();
   // variables ----------------------------------------------------------------
-  const year = (budget.start_date as Date).getUTCFullYear();
-  const category_name = budget?.category?.name || "no tenemos category pelao";
-  const indexMonth = (budget.start_date as Date).getUTCMonth();
+  const year = budget.start_date.getUTCFullYear();
+  const category_name = budget.category.name;
+  const indexMonth = budget.start_date.getUTCMonth();
   const month_name = monthList[indexMonth].label;
   const formatedDate = `${month_name}/${year}`;
   const budgetCategoryIndex = categories.find(
@@ -81,7 +87,7 @@ export const BudgetCard = ({
     if (key === "other_category") key = "category";
 
     if (key === "month") {
-      if (value === (budget.start_date as Date).getUTCMonth) return;
+      if (value === budget.start_date.getUTCMonth()) return;
     } else if (value === budget[key]) return;
 
     const updateBudgetDto: UpdateBudgetDto = {
@@ -116,13 +122,18 @@ export const BudgetCard = ({
   return (
     <>
       <div className={styles.budgetCardContainer}>
-        <div className={styles.budgetCardContainerInfo}>
-          <h4>{budget.name}</h4>
-          <h5>{capitalizeFull(category_name)}</h5>
-          <h5>{formatedDate}</h5>
-        </div>
-        <div className={styles.budgetCardContainerStatus}>
-          <h4>{budget.status}</h4>
+        <div
+          className={styles.budgetCardContainerInfo}
+          onClick={() => {
+            navigate(`/app/budget/${budget.id}`);
+          }}
+        >
+          <div>
+            <h4>{budget.name}</h4>
+            <h5>{capitalizeFull(category_name)}</h5>
+            <h5>{formatedDate}</h5>
+          </div>
+          <h4>{capitalizeFirstLetter(budget.status)}</h4>
         </div>
         <div className={styles.budgetCardContainerButtons}>
           <Button
@@ -179,7 +190,7 @@ export const BudgetCard = ({
             name: budget.name,
             category: budgetCategoryIndex,
             amount: budget.amount,
-            month: (budget.start_date as Date).getUTCMonth(),
+            month: budget.start_date.getUTCMonth(),
             other_category: undefined,
           }}
           name={`form-update-budget-${budget.id}`}
@@ -285,9 +296,7 @@ export const BudgetCard = ({
               max={99999999.99}
               step={1}
               onChange={() => {}}
-              formatter={(value) =>
-                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
+              formatter={formatInputCurrencyString}
               parser={(value) => value?.replace(/,/g, "") as unknown as number}
               precision={2}
               addonBefore={<DollarOutlined />}

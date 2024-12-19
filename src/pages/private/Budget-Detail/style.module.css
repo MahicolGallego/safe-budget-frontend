@@ -1,1 +1,26 @@
+.budgetDetailContainer {
+  display: flex;
+  flex-direction: row; /* Disposición en fila */
+  justify-content: space-between; /* Opcional, para espaciar los elementos si es necesario */
+}
 
+.budgetContainer {
+  display: flex;
+  flex-direction: column; /* Fila */
+  width: 55%; /* Esto asigna el 60% del ancho al contenedor del presupuesto */
+  margin-top: 30px;
+}
+
+.budgetChartContainer {
+  width: 40%; /* Esto asigna el 40% del ancho al contenedor de los gráficos */
+  margin-top: 30px;
+}
+
+.budgetTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.budgetExpensesContainer {
+}

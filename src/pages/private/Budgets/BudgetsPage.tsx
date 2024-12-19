@@ -25,6 +25,7 @@ import { monthList } from "../../../common/constants/arrays-list/months";
 import { BudgetList } from "../../../components/Budgets/budget-list";
 import { useAuthStore } from "../../../store/auth.store";
 import { Onboarding } from "../../../components/Onboarding/Onboarding";
+import { formatInputCurrencyString } from "../../../common/helpers/formatter-input-currency-string";
 const { Item } = Form;
 const { Text } = Typography;
 
@@ -60,7 +61,7 @@ const Budgets = () => {
       {!user?.onboarding ? (
         <Onboarding />
       ) : (
-        <div className={styles.budgetsContainer}>
+        <>
           {/*Assign the context where notifications will be rendered*/}
           {NotificationContextHolder}
           {/*Title and create button*/}
@@ -189,9 +190,7 @@ const Budgets = () => {
                   max={99999999.99}
                   step={1}
                   onChange={() => {}}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
+                  formatter={formatInputCurrencyString}
                   parser={(value) =>
                     value?.replace(/,/g, "") as unknown as number
                   }
@@ -207,7 +206,7 @@ const Budgets = () => {
                   rules={[
                     {
                       required: true,
-                      message: "Please asign a month!",
+                      message: "Please assign a month!",
                     },
                   ]}
                 >
@@ -273,7 +272,7 @@ const Budgets = () => {
 
           {/*Budgets list*/}
           {budgets.length > 0 && (
-            <div className={styles.BudgetsContainer}>
+            <div className={styles.budgetsContainer}>
               <BudgetList
                 // set a new list instead of give the references in memory
                 budgets={budgets}
@@ -284,7 +283,7 @@ const Budgets = () => {
               />
             </div>
           )}
-        </div>
+        </>
       )}
     </>
   );

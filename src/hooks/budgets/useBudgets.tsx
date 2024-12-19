@@ -6,7 +6,10 @@ import { findAllCategories } from "../../actions/categories.actions";
 import { capitalizeFirstLetter } from "../../common/helpers/capitalize.methods";
 import { FormInstance } from "antd";
 import { useNotification } from "../notifications/useNotification";
-import { IBudgetResponse } from "../../common/interfaces/api-responses/budget.responses.interfaces";
+import {
+  IBudgetResponse,
+  IBudgetResponseWithDates,
+} from "../../common/interfaces/api-responses/budget.responses.interfaces";
 import {
   createBudget,
   deleteBudget,
@@ -24,7 +27,7 @@ export const useBudgets = () => {
 
   const [budgetFilters, setBudgetFilters] = useState<FilterBudgetDto>({});
 
-  const [budgets, setBudgets] = useState<IBudgetResponse[]>([]);
+  const [budgets, setBudgets] = useState<IBudgetResponseWithDates[]>([]);
 
   const handleCreateBudget = async (
     data: formCreateBudget,
@@ -36,14 +39,14 @@ export const useBudgets = () => {
       category = data.other_category.toLowerCase().trim();
     else category = data.category.toLowerCase().trim();
 
-    const newBudgetRegistered = (await handleBudgetFormModalOk(() =>
+    const newBudgetRegistered = await handleBudgetFormModalOk(() =>
       createBudget({
         name: data.name,
         category_name: category,
         month: data.month,
         amount: data.amount,
       })
-    )) as IBudgetResponse;
+    );
 
     handleHiddenModal();
 
@@ -59,21 +62,21 @@ export const useBudgets = () => {
     }
 
     // transform Dates from strings to Date in UTC
-    newBudgetRegistered.start_date = parseISO(
-      newBudgetRegistered.start_date as string
-    );
-    newBudgetRegistered.end_date = parseISO(
-      newBudgetRegistered.end_date as string
-    );
-
-    setBudgets([newBudgetRegistered, ...budgets]);
+    const start_date = parseISO(newBudgetRegistered.start_date);
+    const end_date = parseISO(newBudgetRegistered.end_date);
+    const newBudgetRegisteredWithDate = {
+      ...newBudgetRegistered,
+      start_date,
+      end_date,
+    };
+    setBudgets([newBudgetRegisteredWithDate, ...budgets]);
     openNotification("success", "Success", "Budget created successfully");
   };
 
   const handleFindAllBudgets = async (
     filterOptions: FilterBudgetDto
   ): Promise<void> => {
-    let data = await findAllBudgets(filterOptions);
+    const data = await findAllBudgets(filterOptions);
     if (data === null) {
       openNotification(
         "error",
@@ -84,19 +87,20 @@ export const useBudgets = () => {
     }
 
     // transform Dates from strings to Date in UTC
+    let dataWithDates: IBudgetResponseWithDates[] = [];
     if (data.length) {
-      data = data.map((budget) => {
-        budget.start_date = parseISO(budget.start_date as string);
-        budget.end_date = parseISO(budget.end_date as string);
-        return budget;
+      dataWithDates = data.map((budget) => {
+        const start_date = parseISO(budget.start_date);
+        const end_date = parseISO(budget.end_date);
+        return { ...budget, start_date, end_date };
       });
     }
 
-    setBudgets(data);
+    setBudgets(dataWithDates);
   };
 
   const handleUpdateBudget = async (
-    budgetToUpdate: IBudgetResponse,
+    budgetToUpdate: IBudgetResponseWithDates,
     updateBudgetDto: UpdateBudgetDto,
     form: FormInstance,
     handleRequestUpdateBudget: (
@@ -104,9 +108,9 @@ export const useBudgets = () => {
     ) => Promise<IBudgetResponse | null>
   ) => {
     const BudgetToUpdate = { ...budgetToUpdate };
-    const updatedBudget = (await handleRequestUpdateBudget(() =>
+    const updatedBudget = await handleRequestUpdateBudget(() =>
       updateBudget(budgetToUpdate.id, updateBudgetDto)
-    )) as IBudgetResponse;
+    );
     if (updatedBudget === null) {
       openNotification(
         "error",
@@ -121,19 +125,25 @@ export const useBudgets = () => {
             category.label.toLowerCase() === BudgetToUpdate.category.name
         )?.value,
         amount: BudgetToUpdate.amount,
-        month: (BudgetToUpdate.start_date as Date).getUTCMonth(),
+        month: BudgetToUpdate.start_date.getUTCMonth(),
         other_category: undefined,
       });
       return;
     }
 
     // transform Dates from strings to Date
-    updatedBudget.start_date = parseISO(updatedBudget.start_date as string);
-    updatedBudget.end_date = parseISO(updatedBudget.end_date as string);
+    const start_date = parseISO(updatedBudget.start_date as string);
+    const end_date = parseISO(updatedBudget.end_date as string);
+
+    const updatedBudgetWithDates: IBudgetResponseWithDates = {
+      ...updatedBudget,
+      start_date,
+      end_date,
+    };
 
     const updateBudgets = budgets.map((budget) => {
       if (budget.id !== BudgetToUpdate.id) return budget;
-      return updatedBudget as IBudgetResponse;
+      return updatedBudgetWithDates;
     });
 
     if (updateBudgetDto.month)
@@ -149,7 +159,7 @@ export const useBudgets = () => {
   };
 
   const handleDeleteBudget = async (budget_id: string): Promise<void> => {
-    const result = await handleBudgetFormModalOk(() => deleteBudget(budget_id));
+    const result = await deleteBudget(budget_id);
 
     if (result === null) {
       openNotification(
@@ -237,7 +247,7 @@ export const useBudgets = () => {
   };
 
   const handleBudgetFormModalOk = async (
-    request: () => Promise<IBudgetResponse | { message: string } | null>
+    request: () => Promise<IBudgetResponse | null>
   ) => {
     setModalLoading(true);
     const result = await request();

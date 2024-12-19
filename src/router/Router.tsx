@@ -49,7 +49,7 @@ export const Router = createBrowserRouter([
         Component: Budgets,
       },
       {
-        path: "budget-detail",
+        path: "budget/:budget_id",
         Component: BudgetDetail,
       },
     ],

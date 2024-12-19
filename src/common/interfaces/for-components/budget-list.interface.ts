@@ -1,14 +1,17 @@
 import { FormInstance } from "antd";
 import { UpdateBudgetDto } from "../api-requests-dtos/update-budget.dto";
-import { IBudgetResponse } from "../api-responses/budget.responses.interfaces";
+import {
+  IBudgetResponse,
+  IBudgetResponseWithDates,
+} from "../api-responses/budget.responses.interfaces";
 import { IForSelect } from "./select.interface";
 
 export interface IBudgetList {
-  budgets: IBudgetResponse[];
+  budgets: IBudgetResponseWithDates[];
   categories: IForSelect[];
   monthListForSelect: IForSelect[];
   budgetUpdateFunction: (
-    budgetToUpdate: IBudgetResponse,
+    budgetToUpdate: IBudgetResponseWithDates,
     updateBudgetDto: UpdateBudgetDto,
     form: FormInstance,
     handleRequestUpdateBudget: (
