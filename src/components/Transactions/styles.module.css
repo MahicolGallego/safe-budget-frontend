@@ -1,0 +1,50 @@
+.transactionCardContainer {
+  flex: 0 0 calc(25% - 45px);
+  border-radius: 5px;
+  position: relative;
+  min-width: 250px;
+  transition: all 0.2s ease-in-out;
+}
+
+h4 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+h5 {
+  margin: 0;
+}
+
+.transactionCardContainerButtons {
+  position: absolute;
+  bottom: -15px;
+  right: 20px;
+}
+
+.transactionCard {
+  text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px !important;
+}
+
+.deleteButton {
+  margin-top: auto;
+  background-color: red;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: none;
+}
+
+.transactionCardContainer:hover,
+.deleteButton:hover {
+  transform: scale(1.03);
+}
+
+.deleteButton:hover {
+  background-color: red !important;
+}
+
+.editButton:focus,
+.deleteButton:focus {
+  outline: none;
+}

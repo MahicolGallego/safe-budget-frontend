@@ -25,7 +25,7 @@ import { monthList } from "../../../common/constants/arrays-list/months";
 import { BudgetList } from "../../../components/Budgets/budget-list";
 import { useAuthStore } from "../../../store/auth.store";
 import { Onboarding } from "../../../components/Onboarding/Onboarding";
-import { formatInputCurrencyString } from "../../../common/helpers/formatter-input-currency-string";
+import { formatInputCurrencyString } from "../../../common/helpers/formatter-input-currency-string.helper";
 const { Item } = Form;
 const { Text } = Typography;
 

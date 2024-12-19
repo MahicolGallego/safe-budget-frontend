@@ -7,7 +7,10 @@ import { parseISO } from "date-fns";
 import { budgetStatus } from "../../common/constants/enums/budget-status.enum";
 import { formCreateTransaction } from "../../common/interfaces/for-components/form-create-transaction.interface";
 import { FormInstance } from "antd";
-import { createTransaction } from "../../actions/transactions.actions";
+import {
+  createTransaction,
+  findAllTransactions,
+} from "../../actions/transactions.actions";
 import { useAsyncModal } from "../async-modal/useAsyncModal";
 import {
   ITransactionResponse,
@@ -104,8 +107,45 @@ export const useBudgetDetail = () => {
       ...newTransactionRegistered,
       date: dateWithDate,
     };
-    setTransactions([newTransactionRegisteredWithDate, ...transactions]);
+    const UpdateTransactions = [
+      newTransactionRegisteredWithDate,
+      ...transactions,
+    ];
+
+    // sort the list
+    if (UpdateTransactions.length > 1)
+      UpdateTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+    setTransactions(UpdateTransactions);
     openNotification("success", "Success", "Budget created successfully");
+  };
+
+  const handleFindAllTransactions = async (): Promise<void> => {
+    const data = await findAllTransactions(budget.id);
+    if (data === null) {
+      openNotification(
+        "error",
+        "Error",
+        "Error retrieving data or filtered data"
+      );
+      return;
+    }
+
+    // transform Dates from strings to Date in UTC
+    let dataWithDates: ITransactionResponseWithDate[] = [];
+    if (data.length) {
+      dataWithDates = data.map((transaction) => {
+        const date = parseISO(transaction.date);
+        return { ...transaction, date };
+      });
+
+      //sort transactions
+      if (dataWithDates.length > 1) {
+        dataWithDates.sort((a, b) => b.date.getTime() - a.date.getTime());
+      }
+    }
+
+    setTransactions(dataWithDates);
   };
 
   // modal ----------------------------------------------------------------
@@ -145,9 +185,14 @@ export const useBudgetDetail = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (budget.id) handleFindAllTransactions();
+  }, []);
+
   return {
     //properties
     budget,
+    transactions,
     requesting,
     openModal,
     modalLoading,

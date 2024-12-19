@@ -3,7 +3,7 @@ import { monthList } from "../../common/constants/arrays-list/months";
 import { IForSelect } from "../../common/interfaces/for-components/select.interface";
 import { ICategoryResponse } from "../../common/interfaces/api-responses/categories.responses.interfaces";
 import { findAllCategories } from "../../actions/categories.actions";
-import { capitalizeFirstLetter } from "../../common/helpers/capitalize.methods";
+import { capitalizeFirstLetter } from "../../common/helpers/capitalize.methods.helper";
 import { FormInstance } from "antd";
 import { useNotification } from "../notifications/useNotification";
 import {

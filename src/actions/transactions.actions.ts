@@ -16,3 +16,18 @@ export const createTransaction = async (
     return null;
   }
 };
+
+export const findAllTransactions = async (
+  budget_id: string
+): Promise<ITransactionResponse[] | null> => {
+  try {
+    // base URL
+    const url = `/transactions/budget/${budget_id}`;
+
+    const { data } = await BudgetsApi.get<ITransactionResponse[]>(url);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

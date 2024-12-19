@@ -21,7 +21,7 @@ import { IBudgetCard } from "../../common/interfaces/for-components/budget-card.
 import {
   capitalizeFirstLetter,
   capitalizeFull,
-} from "../../common/helpers/capitalize.methods";
+} from "../../common/helpers/capitalize.methods.helper";
 import { monthList } from "../../common/constants/arrays-list/months";
 import { useAsyncModal } from "../../hooks/async-modal/useAsyncModal";
 import { useState } from "react";
@@ -30,7 +30,7 @@ import { formCreateBudget } from "../../common/interfaces/for-components/form-cr
 import { UpdateBudgetDto } from "../../common/interfaces/api-requests-dtos/update-budget.dto";
 import { budgetStatus } from "../../common/constants/enums/budget-status.enum";
 import { useNavigate } from "react-router";
-import { formatInputCurrencyString } from "../../common/helpers/formatter-input-currency-string";
+import { formatInputCurrencyString } from "../../common/helpers/formatter-input-currency-string.helper";
 
 type budgetFormKeys = keyof formCreateBudget;
 const { Item } = Form;
@@ -183,7 +183,7 @@ export const BudgetCard = ({
           </Button>,
         ]}
       >
-        {/*Budget creation form*/}
+        {/*Budget update form*/}
         <Form
           form={form}
           initialValues={{

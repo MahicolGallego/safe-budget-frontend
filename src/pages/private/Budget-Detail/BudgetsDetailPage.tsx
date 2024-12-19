@@ -12,19 +12,21 @@ import {
 import {
   capitalizeFirstLetter,
   capitalizeFull,
-} from "../../../common/helpers/capitalize.methods";
+} from "../../../common/helpers/capitalize.methods.helper";
 import { monthList } from "../../../common/constants/arrays-list/months";
-import { formatCurrencyString } from "../../../common/helpers/formatter-currency-string";
-import { formatInputCurrencyString } from "../../../common/helpers/formatter-input-currency-string";
+import { formatCurrencyString } from "../../../common/helpers/formatter-currency-string.helper";
+import { formatInputCurrencyString } from "../../../common/helpers/formatter-input-currency-string.helper";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { formatterPickerDate } from "../../../common/helpers/formatter-picker-date.helper";
+import { TransactionList } from "../../../components/Transactions/Transaction-list";
 
 dayjs.extend(customParseFormat);
 
 const dateFormat = "YYYY-MM-DD";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Item } = Form;
 
 const BudgetDetail = () => {
@@ -34,6 +36,7 @@ const BudgetDetail = () => {
   const {
     //Properties
     budget,
+    transactions,
     requesting,
     openModal,
     modalLoading,
@@ -54,13 +57,6 @@ const BudgetDetail = () => {
   const month_name = monthList[indexMonth].label;
   const formatedDate = `${month_name}/${year}`;
   const formattedAmount = formatCurrencyString(budget.amount);
-
-  const formatterPickerDate = (date: Date) => {
-    return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(
-      2,
-      "0"
-    )}-${String(date.getUTCDate()).padStart(2, "0")}`;
-  };
 
   const datePeakerMinDate = () => {
     return formatterPickerDate(budget.start_date);
@@ -112,6 +108,13 @@ const BudgetDetail = () => {
                   <Title level={5} style={{ marginTop: 0 }}>
                     {formatedDate}
                   </Title>
+                  <Text
+                    style={{ fontSize: 12, color: "gray" }}
+                    hidden={budget.status !== "active" ? false : true}
+                  >
+                    You can't create, update, or delete expenses in Budget that
+                    your status is pending or completed
+                  </Text>
                 </div>
                 <div className={styles.budgetExpensesContainer}>
                   <Title level={4}>Expenses</Title>
@@ -228,6 +231,16 @@ const BudgetDetail = () => {
                 </Item>
               </Form>
             </Modal>
+            {/*Budgets list*/}
+            {transactions.length > 0 && (
+              <div className={styles.budgetExpensesContainer}>
+                <TransactionList
+                  // set a new list instead of give the references in memory
+                  budget={budget}
+                  transactions={transactions}
+                />
+              </div>
+            )}
           </>
         )
       )}
