@@ -48,13 +48,13 @@ export const TransactionCard = ({
               transactionDeleteFunction(transaction.id);
             }}
             placement="bottom"
+            disabled={hiddenAndDisabledElement}
           >
             <Button
               className={styles.deleteButton}
               type="primary"
               icon={<DeleteOutlined />}
               iconPosition="end"
-              onClick={() => {}}
               disabled={hiddenAndDisabledElement}
             ></Button>
           </Popconfirm>

@@ -20,10 +20,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (is_authenticated === false) {
+      console.log("redirect from no authenticated");
       if (location.pathname.startsWith("/app")) {
         navigate("/login", { replace: true });
       }
-    } else {
+    } else if (is_authenticated) {
+      console.log("redirect from authenticated");
       if (
         ["/", "/app", "/app/", "/home", "/register", "/login"].includes(
           location.pathname
