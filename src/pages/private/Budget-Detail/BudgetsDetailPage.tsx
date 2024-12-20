@@ -46,6 +46,7 @@ const BudgetDetail = () => {
 
     //Methods
     handleCreateTransactions,
+    handleDeleteTransaction,
     handleShowModal,
     handleHiddenModal,
   } = useBudgetDetail();
@@ -238,6 +239,7 @@ const BudgetDetail = () => {
                   // set a new list instead of give the references in memory
                   budget={budget}
                   transactions={transactions}
+                  transactionDeleteFunction={handleDeleteTransaction}
                 />
               </div>
             )}

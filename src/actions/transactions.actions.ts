@@ -23,8 +23,22 @@ export const findAllTransactions = async (
   try {
     // base URL
     const url = `/transactions/budget/${budget_id}`;
-
     const { data } = await BudgetsApi.get<ITransactionResponse[]>(url);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const deleteTransaction = async (
+  transaction_id: string,
+  budget_id: string
+) => {
+  try {
+    const { data } = await BudgetsApi.delete<{ message: string }>(
+      `transactions/${transaction_id}/budget/${budget_id}`
+    );
     return data;
   } catch (error) {
     console.error(error);

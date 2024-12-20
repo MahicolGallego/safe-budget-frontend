@@ -38,6 +38,7 @@ h5 {
 .transactionCardContainer:hover,
 .deleteButton:hover {
   transform: scale(1.03);
+  cursor: pointer;
 }
 
 .deleteButton:hover {

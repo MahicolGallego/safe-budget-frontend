@@ -9,6 +9,7 @@ import { formCreateTransaction } from "../../common/interfaces/for-components/fo
 import { FormInstance } from "antd";
 import {
   createTransaction,
+  deleteTransaction,
   findAllTransactions,
 } from "../../actions/transactions.actions";
 import { useAsyncModal } from "../async-modal/useAsyncModal";
@@ -148,6 +149,27 @@ export const useBudgetDetail = () => {
     setTransactions(dataWithDates);
   };
 
+  const handleDeleteTransaction = async (
+    transaction_id: string
+  ): Promise<void> => {
+    const result = await deleteTransaction(transaction_id, budget.id);
+
+    if (result === null) {
+      openNotification(
+        "error",
+        "Error deleting transaction",
+        "Check your connection.\nPlease try again."
+      );
+      return;
+    }
+
+    const updateTransactions = transactions.filter(
+      (transaction) => transaction.id !== transaction_id
+    );
+    setTransactions(updateTransactions);
+    openNotification("success", "Success", "transaction deleted successfully");
+  };
+
   // modal ----------------------------------------------------------------
 
   const {
@@ -187,7 +209,7 @@ export const useBudgetDetail = () => {
 
   useEffect(() => {
     if (budget.id) handleFindAllTransactions();
-  }, []);
+  }, [budget]);
 
   return {
     //properties
@@ -202,6 +224,7 @@ export const useBudgetDetail = () => {
 
     //methods
     handleCreateTransactions,
+    handleDeleteTransaction,
     handleShowModal,
     handleHiddenModal,
   };

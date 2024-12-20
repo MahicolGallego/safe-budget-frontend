@@ -41,6 +41,7 @@ h5 {
 .budgetCardContainer:hover,
 .editButton:hover,
 .deleteButton:hover {
+  cursor: pointer;
   transform: scale(1.03);
 }
 

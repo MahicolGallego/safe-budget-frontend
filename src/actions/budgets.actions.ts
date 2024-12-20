@@ -84,7 +84,6 @@ export const updateBudget = async (
 
 export const deleteBudget = async (budget_id: string) => {
   try {
-    console.log(budget_id);
     const { data } = await BudgetsApi.delete<{ message: string }>(
       `budgets/${budget_id}`
     );

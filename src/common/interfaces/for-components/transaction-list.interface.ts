@@ -4,4 +4,5 @@ import { ITransactionResponseWithDate } from "../api-responses/transaction.respo
 export interface ITransactionList {
   budget: IBudgetResponseWithDates;
   transactions: ITransactionResponseWithDate[];
+  transactionDeleteFunction: (budget_id: string) => void;
 }
