@@ -220,55 +220,53 @@ const Budgets = () => {
             </Form>
           </Modal>
           {/*Filters fields*/}
-          <div>
-            <Space wrap>
-              <Space direction="vertical" size="small">
-                <Text>
-                  <CalendarOutlined style={{ marginRight: 3 }} />
-                  Month
-                </Text>
-                <Select
-                  defaultValue={"..."}
-                  style={{ width: 120 }}
-                  options={[{ value: "", label: "..." }, ...monthList]}
-                  onChange={(value) => {
-                    console.log(value);
-                    handleBudgetFilters("month", value);
-                  }}
-                />
-              </Space>
 
-              <Space direction="vertical" size="small">
-                <Text>
-                  <ClockCircleOutlined style={{ marginRight: 3 }} />
-                  Status
-                </Text>
-                <Select
-                  defaultValue={"..."}
-                  style={{ width: 120 }}
-                  options={[{ value: "", label: "..." }, ...budgetStatus]}
-                  onChange={(value) => {
-                    handleBudgetFilters("status", value);
-                  }}
-                />
-              </Space>
-
-              <Space direction="vertical" size="small">
-                <Text>
-                  <TagOutlined style={{ marginRight: 3 }} />
-                  Category
-                </Text>
-                <Select
-                  defaultValue={"..."}
-                  style={{ width: 120 }}
-                  options={[{ value: "", label: "..." }, ...categories]}
-                  onChange={(value) => {
-                    handleBudgetFilters("category", value);
-                  }}
-                />
-              </Space>
+          <Space wrap>
+            <Space direction="vertical" size="small">
+              <Text>
+                <CalendarOutlined style={{ marginRight: 3 }} />
+                Month
+              </Text>
+              <Select
+                defaultValue={"..."}
+                style={{ width: 120 }}
+                options={[{ value: "", label: "..." }, ...monthList]}
+                onChange={(value) => {
+                  handleBudgetFilters("month", value);
+                }}
+              />
             </Space>
-          </div>
+
+            <Space direction="vertical" size="small">
+              <Text>
+                <ClockCircleOutlined style={{ marginRight: 3 }} />
+                Status
+              </Text>
+              <Select
+                defaultValue={"..."}
+                style={{ width: 120 }}
+                options={[{ value: "", label: "..." }, ...budgetStatus]}
+                onChange={(value) => {
+                  handleBudgetFilters("status", value);
+                }}
+              />
+            </Space>
+
+            <Space direction="vertical" size="small">
+              <Text>
+                <TagOutlined style={{ marginRight: 3 }} />
+                Category
+              </Text>
+              <Select
+                defaultValue={"..."}
+                style={{ width: 120 }}
+                options={[{ value: "", label: "..." }, ...categories]}
+                onChange={(value) => {
+                  handleBudgetFilters("category", value);
+                }}
+              />
+            </Space>
+          </Space>
 
           {/*Budgets list*/}
           {budgets.length > 0 && (

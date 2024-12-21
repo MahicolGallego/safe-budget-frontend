@@ -81,7 +81,7 @@ export const useBudgets = () => {
       openNotification(
         "error",
         "Error",
-        "Error retrieving data or filtered data"
+        "Error retrieving data or filtered data\nCheck the filters applied.\nCheck your connection.\nPlease try again later"
       );
       return;
     }

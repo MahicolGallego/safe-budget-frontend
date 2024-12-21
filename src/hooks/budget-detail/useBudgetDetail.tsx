@@ -19,6 +19,7 @@ import {
 } from "../../common/interfaces/api-responses/transaction.responses.interfaces";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { FilterTransactionDto } from "../../common/interfaces/api-requests-dtos/filter-transaction.dto";
 
 // set so that set the dates in UTC format
 dayjs.extend(utc);
@@ -69,6 +70,9 @@ export const useBudgetDetail = () => {
   const [transactions, setTransactions] = useState<
     ITransactionResponseWithDate[]
   >([]);
+
+  const [transactionFilters, setTransactionFilters] =
+    useState<FilterTransactionDto>({});
 
   const handleCreateTransactions = async (
     data: formCreateTransaction,
@@ -122,12 +126,12 @@ export const useBudgetDetail = () => {
   };
 
   const handleFindAllTransactions = async (): Promise<void> => {
-    const data = await findAllTransactions(budget.id);
+    const data = await findAllTransactions(budget.id, transactionFilters);
     if (data === null) {
       openNotification(
         "error",
         "Error",
-        "Error retrieving data or filtered data"
+        "Error retrieving data or filtered data.\nCheck the filters applied.\nCheck your connection.\nPlease try again later"
       );
       return;
     }
@@ -170,6 +174,12 @@ export const useBudgetDetail = () => {
     openNotification("success", "Success", "transaction deleted successfully");
   };
 
+  const handleTransactionFilters = (
+    filter: keyof FilterTransactionDto,
+    value: number
+  ) => {
+    setTransactionFilters({ ...transactionFilters, [filter]: value });
+  };
   // modal ----------------------------------------------------------------
 
   const {
@@ -209,7 +219,7 @@ export const useBudgetDetail = () => {
 
   useEffect(() => {
     if (budget.id) handleFindAllTransactions();
-  }, [budget]);
+  }, [budget, transactionFilters]);
 
   return {
     //properties
@@ -225,6 +235,7 @@ export const useBudgetDetail = () => {
     //methods
     handleCreateTransactions,
     handleDeleteTransaction,
+    handleTransactionFilters,
     handleShowModal,
     handleHiddenModal,
   };

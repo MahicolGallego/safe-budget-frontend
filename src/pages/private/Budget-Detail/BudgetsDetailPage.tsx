@@ -1,8 +1,18 @@
-import { Button, Form, Input, InputNumber, Modal, Typography } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Space,
+  Typography,
+} from "antd";
 import { LoadingSpinner } from "../../../components/share/loading";
 import { useBudgetDetail } from "../../../hooks/budget-detail/useBudgetDetail";
 import styles from "./style.module.css";
 import {
+  CalendarOutlined,
   CloseOutlined,
   DollarOutlined,
   EditOutlined,
@@ -21,6 +31,8 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { formatterPickerDate } from "../../../common/helpers/formatter-picker-date.helper";
 import { TransactionList } from "../../../components/Transactions/Transaction-list";
+import { monthDays } from "../../../common/constants/arrays-list/month-days";
+import { amountRange } from "../../../common/constants/arrays-list/amount-range";
 
 dayjs.extend(customParseFormat);
 
@@ -47,17 +59,20 @@ const BudgetDetail = () => {
     //Methods
     handleCreateTransactions,
     handleDeleteTransaction,
+    handleTransactionFilters,
     handleShowModal,
     handleHiddenModal,
   } = useBudgetDetail();
 
   // variables ----------------------------------------------------------------
   const year = budget.start_date.getUTCFullYear();
-
   const indexMonth = budget.start_date.getUTCMonth();
   const month_name = monthList[indexMonth].label;
   const formatedDate = `${month_name}/${year}`;
   const formattedAmount = formatCurrencyString(budget.amount);
+  const daysForSelect = monthDays.filter(
+    (day) => (day.value as number) <= budget.end_date.getUTCDate()
+  );
 
   const datePeakerMinDate = () => {
     return formatterPickerDate(budget.start_date);
@@ -232,6 +247,61 @@ const BudgetDetail = () => {
                 </Item>
               </Form>
             </Modal>
+            {/*Filters fields*/}
+            <Space wrap>
+              <Space direction="vertical" size="small">
+                <Text>
+                  <CalendarOutlined style={{ marginRight: 3 }} />
+                  min day
+                </Text>
+                <Select
+                  style={{ width: 120 }}
+                  options={[{ value: 0, label: "..." }, ...daysForSelect]}
+                  onChange={(value: number) => {
+                    handleTransactionFilters("min_day", value);
+                  }}
+                />
+              </Space>
+              <Space direction="vertical" size="small">
+                <Text>
+                  <CalendarOutlined style={{ marginRight: 3 }} />
+                  max day
+                </Text>
+                <Select
+                  style={{ width: 120 }}
+                  options={[{ value: 0, label: "..." }, ...daysForSelect]}
+                  onChange={(value: number) => {
+                    handleTransactionFilters("max_day", value);
+                  }}
+                />
+              </Space>
+              <Space direction="vertical" size="small">
+                <Text>
+                  <DollarOutlined style={{ marginRight: 3 }} />
+                  min amount
+                </Text>
+                <Select
+                  style={{ width: 120 }}
+                  options={[{ value: 0, label: "..." }, ...amountRange]}
+                  onChange={(value: number) => {
+                    handleTransactionFilters("min_amount", value);
+                  }}
+                />
+              </Space>
+              <Space direction="vertical" size="small">
+                <Text>
+                  <DollarOutlined style={{ marginRight: 3 }} />
+                  max amount
+                </Text>
+                <Select
+                  style={{ width: 120 }}
+                  options={[{ value: 0, label: "..." }, ...amountRange]}
+                  onChange={(value: number) => {
+                    handleTransactionFilters("max_amount", value);
+                  }}
+                />
+              </Space>
+            </Space>
             {/*Budgets list*/}
             {transactions.length > 0 && (
               <div className={styles.budgetExpensesContainer}>

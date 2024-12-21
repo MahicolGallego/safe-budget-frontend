@@ -1,4 +1,4 @@
-import { IForSelect } from "../interfaces/for-components/select.interface";
+import { IForSelect } from "../../interfaces/for-components/select.interface";
 
 export const monthList: IForSelect[] = [
   {
