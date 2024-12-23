@@ -29,14 +29,12 @@ import { formatInputCurrencyString } from "../../../common/helpers/formatter-inp
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { dayjsDateFormat } from "../../../common/constants/variables/dayjs-date-format.ts";
 import { formatterPickerDate } from "../../../common/helpers/formatter-picker-date.helper";
 import { TransactionList } from "../../../components/Transactions/Transaction-list";
 import { monthDays } from "../../../common/constants/arrays-list/month-days";
 import { amountRange } from "../../../common/constants/arrays-list/amount-range";
-
 dayjs.extend(customParseFormat);
-
-const dateFormat = "YYYY-MM-DD";
 
 const { Title, Text } = Typography;
 const { Item } = Form;
@@ -58,6 +56,7 @@ const BudgetDetail = () => {
 
     //Methods
     handleCreateTransactions,
+    handleUpdateTransaction,
     handleDeleteTransaction,
     handleTransactionFilters,
     handleShowModal,
@@ -240,8 +239,8 @@ const BudgetDetail = () => {
                   ]}
                 >
                   <DatePicker
-                    minDate={dayjs(datePeakerMinDate(), dateFormat)}
-                    maxDate={dayjs(datePeakerMaxDate(), dateFormat)}
+                    minDate={dayjs(datePeakerMinDate(), dayjsDateFormat)}
+                    maxDate={dayjs(datePeakerMaxDate(), dayjsDateFormat)}
                     placement="bottomRight"
                   />
                 </Item>
@@ -309,6 +308,7 @@ const BudgetDetail = () => {
                   // set a new list instead of give the references in memory
                   budget={budget}
                   transactions={transactions}
+                  transactionUpdateFunction={handleUpdateTransaction}
                   transactionDeleteFunction={handleDeleteTransaction}
                 />
               </div>

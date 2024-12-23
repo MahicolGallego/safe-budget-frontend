@@ -163,7 +163,7 @@ export const BudgetCard = ({
           </Popconfirm>
         </div>
       </div>
-      {/*Budget creation form Modal*/}
+      {/*Budget update form Modal*/}
       <Modal
         open={openModal}
         title="Edit Budget"
@@ -193,7 +193,7 @@ export const BudgetCard = ({
             month: budget.start_date.getUTCMonth(),
             other_category: undefined,
           }}
-          name={`form-update-budget-${budget.id}`}
+          name={`form-update-budget:${budget.id}`}
           layout="vertical"
         >
           <Item

@@ -117,7 +117,7 @@ export const useBudgets = () => {
         "Error updating budget",
         "Possible causes\nA Budget with this name already exists.\nCheck your connection.\nPlease try again."
       );
-      // regresar los campos a su valor anterior por que no se actualizaron
+      // Return the fields to their previous value Why they weren't updated
       form.setFieldsValue({
         name: BudgetToUpdate.name,
         category: categories.find(

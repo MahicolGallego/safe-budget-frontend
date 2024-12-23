@@ -4,6 +4,7 @@ import { TransactionCard } from "./transaction-card";
 export const TransactionList = ({
   budget,
   transactions,
+  transactionUpdateFunction,
   transactionDeleteFunction,
 }: ITransactionList) => {
   return (
@@ -12,6 +13,7 @@ export const TransactionList = ({
         <TransactionCard
           budget={budget}
           transaction={transaction}
+          transactionUpdateFunction={transactionUpdateFunction}
           transactionDeleteFunction={transactionDeleteFunction}
         />
       ))}

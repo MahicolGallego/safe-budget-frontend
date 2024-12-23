@@ -1,5 +1,6 @@
 import { CreateTransactionDto } from "../common/interfaces/api-requests-dtos/create-transaction.dto";
 import { FilterTransactionDto } from "../common/interfaces/api-requests-dtos/filter-transaction.dto";
+import { UpdateTransactionDto } from "../common/interfaces/api-requests-dtos/update-transaction.dto";
 import { ITransactionResponse } from "../common/interfaces/api-responses/transaction.responses.interfaces";
 import { BudgetsApi } from "../config/api/BudgetsApi";
 
@@ -56,6 +57,23 @@ export const findAllTransactions = async (
     }
 
     const { data } = await BudgetsApi.get<ITransactionResponse[]>(url);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const updateTransaction = async (
+  id_transaction: string,
+  updateTransactionDto: UpdateTransactionDto
+) => {
+  try {
+    console.log(updateTransactionDto);
+    const { data } = await BudgetsApi.patch<ITransactionResponse>(
+      `/transactions/${id_transaction}`,
+      updateTransactionDto
+    );
     return data;
   } catch (error) {
     console.error(error);

@@ -11,6 +11,7 @@ import {
   createTransaction,
   deleteTransaction,
   findAllTransactions,
+  updateTransaction,
 } from "../../actions/transactions.actions";
 import { useAsyncModal } from "../async-modal/useAsyncModal";
 import {
@@ -18,9 +19,14 @@ import {
   ITransactionResponseWithDate,
 } from "../../common/interfaces/api-responses/transaction.responses.interfaces";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
 import { FilterTransactionDto } from "../../common/interfaces/api-requests-dtos/filter-transaction.dto";
+import { UpdateTransactionDto } from "../../common/interfaces/api-requests-dtos/update-transaction.dto";
+import { formatterPickerDate } from "../../common/helpers/formatter-picker-date.helper";
+import { dayjsDateFormat } from "../../common/constants/variables/dayjs-date-format";
 
+dayjs.extend(customParseFormat);
 // set so that set the dates in UTC format
 dayjs.extend(utc);
 
@@ -78,7 +84,7 @@ export const useBudgetDetail = () => {
     data: formCreateTransaction,
     form: FormInstance
   ): Promise<void> => {
-    // convert date form day js to Date
+    // convert date form day js to Date in UTC
     const dateUTC = dayjs.utc(data.date).toDate();
     dateUTC.setUTCHours(0, 0, 0);
     const newTransactionRegistered = await handleTransactionFormModalOk(() =>
@@ -101,11 +107,6 @@ export const useBudgetDetail = () => {
       );
       return;
     }
-
-    // transform Dates from strings to Date in UTC
-    console.log(
-      "newTransactionRegistered.date: " + newTransactionRegistered.date
-    );
 
     const dateWithDate = parseISO(newTransactionRegistered.date);
     const newTransactionRegisteredWithDate = {
@@ -151,6 +152,59 @@ export const useBudgetDetail = () => {
     }
 
     setTransactions(dataWithDates);
+  };
+
+  const handleUpdateTransaction = async (
+    transactionToUpdate: ITransactionResponseWithDate,
+    updateTransactionDto: UpdateTransactionDto,
+    form: FormInstance,
+    handleRequestUpdateTransaction: (
+      request: () => Promise<ITransactionResponse | null>
+    ) => Promise<ITransactionResponse | null>
+  ) => {
+    const updatedTransaction = await handleRequestUpdateTransaction(() =>
+      updateTransaction(transactionToUpdate.id, updateTransactionDto)
+    );
+
+    if (updatedTransaction === null) {
+      openNotification(
+        "error",
+        "Error updating transaction",
+        "Check your connection.\nPlease try again."
+      );
+      // Return the fields to their previous value Why they weren't updated
+      form.setFieldsValue({
+        date: dayjs(
+          formatterPickerDate(transactionToUpdate.date),
+          dayjsDateFormat
+        ),
+        amount: transactionToUpdate.amount,
+        description: transactionToUpdate.description,
+      });
+      return;
+    }
+
+    // transform Dates from strings to Date
+    const dateWithDate = parseISO(updatedTransaction.date);
+
+    const updatedTransactionWithDate = {
+      ...updatedTransaction,
+      date: dateWithDate,
+    };
+
+    const updateTransactions = transactions.map((transaction) => {
+      if (transaction.id === transactionToUpdate.id) {
+        return updatedTransactionWithDate;
+      }
+      return transaction;
+    });
+
+    //sort transactions
+    if (updateTransactionDto.date && updateTransactions.length > 1)
+      updateTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+    setTransactions(updateTransactions);
+    openNotification("success", "Success", "Transaction updated successfully");
   };
 
   const handleDeleteTransaction = async (
@@ -234,6 +288,7 @@ export const useBudgetDetail = () => {
 
     //methods
     handleCreateTransactions,
+    handleUpdateTransaction,
     handleDeleteTransaction,
     handleTransactionFilters,
     handleShowModal,
