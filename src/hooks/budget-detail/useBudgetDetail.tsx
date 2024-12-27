@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { findOneBudget } from "../../actions/budgets.actions";
-import { IBudgetResponseWithDates } from "../../common/interfaces/api-responses/budget.responses.interfaces";
+import { findOneBudget, getBudgetBalance } from "../../actions/budgets.actions";
+import {
+  IBudgetBalanceResponse,
+  IBudgetResponseWithDates,
+} from "../../common/interfaces/api-responses/budget.responses.interfaces";
 import { useNotification } from "../notifications/useNotification";
 import { parseISO } from "date-fns";
 import { budgetStatus } from "../../common/constants/enums/budget-status.enum";
@@ -25,6 +28,7 @@ import { FilterTransactionDto } from "../../common/interfaces/api-requests-dtos/
 import { UpdateTransactionDto } from "../../common/interfaces/api-requests-dtos/update-transaction.dto";
 import { formatterPickerDate } from "../../common/helpers/formatter-picker-date.helper";
 import { dayjsDateFormat } from "../../common/constants/variables/dayjs-date-format";
+import { DetailedExpenseChartProps } from "../../common/interfaces/for-components/chart-interfaces";
 
 dayjs.extend(customParseFormat);
 // set so that set the dates in UTC format
@@ -51,6 +55,13 @@ export const useBudgetDetail = () => {
 
   // budget
   const [budget, setBudget] = useState<IBudgetResponseWithDates>(initialValues);
+  const [budgetBalance, setBudgetBalance] = useState<IBudgetBalanceResponse>({
+    initial_amount: 0,
+    percentage_remaining_amount: 0,
+    percentage_spent_amount: 0,
+    remaining_amount: 0,
+    spent_amount: 0,
+  });
 
   const getBudget = async (budget_id: string) => {
     setRequesting(true);
@@ -69,6 +80,19 @@ export const useBudgetDetail = () => {
     const budgetWithDates = { ...budget, start_date, end_date };
 
     setBudget(budgetWithDates);
+  };
+
+  const handleGetBudgetBalance = async (budget_id: string) => {
+    const balance = await getBudgetBalance(budget_id);
+    if (balance === null) {
+      openNotification(
+        "error",
+        "Error retrieving budget balance",
+        "Check your connection.\nPlease try again."
+      );
+      return;
+    }
+    setBudgetBalance(balance);
   };
 
   // transactions --------------------------------------------------------
@@ -234,6 +258,7 @@ export const useBudgetDetail = () => {
   ) => {
     setTransactionFilters({ ...transactionFilters, [filter]: value });
   };
+
   // modal ----------------------------------------------------------------
 
   const {
@@ -259,6 +284,38 @@ export const useBudgetDetail = () => {
 
   const { NotificationContextHolder, openNotification } = useNotification();
 
+  // charts ----------------------------------------------------------------
+
+  const [detailedExpenseForChart, setDetailedExpenseForChart] = useState<
+    DetailedExpenseChartProps[]
+  >([]);
+
+  const handleDetailedExpenseForChart = (
+    transactions: ITransactionResponseWithDate[]
+  ) => {
+    if (transactions.length) {
+      const totalExpenseByDate: DetailedExpenseChartProps[] = [];
+      transactions.forEach((transaction) => {
+        const date = formatterPickerDate(transaction.date);
+
+        const dateAlreadyExist = totalExpenseByDate.find(
+          (t) => t.date === date
+        );
+        if (dateAlreadyExist) {
+          dateAlreadyExist.expenses =
+            dateAlreadyExist.expenses + transaction.amount;
+        } else {
+          totalExpenseByDate.push({
+            date: date,
+            expenses: transaction.amount,
+          });
+        }
+      });
+
+      setDetailedExpenseForChart(totalExpenseByDate);
+    }
+  };
+
   // useEffect ----------------------------------------------------------------
 
   useEffect(() => {
@@ -275,10 +332,20 @@ export const useBudgetDetail = () => {
     if (budget.id) handleFindAllTransactions();
   }, [budget, transactionFilters]);
 
+  useEffect(() => {
+    if (budget.id) handleGetBudgetBalance(budget.id);
+  }, [budget, transactions]);
+
+  useEffect(() => {
+    if (transactions.length) handleDetailedExpenseForChart(transactions);
+  }, [transactions]);
+
   return {
     //properties
     budget,
+    budgetBalance,
     transactions,
+    detailedExpenseForChart,
     requesting,
     openModal,
     modalLoading,

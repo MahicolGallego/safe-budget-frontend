@@ -16,3 +16,11 @@ export interface IBudgetResponseWithDates
   start_date: Date;
   end_date: Date;
 }
+
+export interface IBudgetBalanceResponse {
+  initial_amount: number;
+  spent_amount: number;
+  percentage_spent_amount: number;
+  remaining_amount: number;
+  percentage_remaining_amount: number;
+}

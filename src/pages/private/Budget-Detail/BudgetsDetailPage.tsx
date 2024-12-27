@@ -34,6 +34,8 @@ import { formatterPickerDate } from "../../../common/helpers/formatter-picker-da
 import { TransactionList } from "../../../components/Transactions/Transaction-list";
 import { monthDays } from "../../../common/constants/arrays-list/month-days";
 import { amountRange } from "../../../common/constants/arrays-list/amount-range";
+import BalanceDonutChart from "../../../components/Charts/donut/DonutChart.tsx";
+import DetailedExpenseBarChart from "../../../components/Charts/bar/BarChart.tsx";
 dayjs.extend(customParseFormat);
 
 const { Title, Text } = Typography;
@@ -46,7 +48,9 @@ const BudgetDetail = () => {
   const {
     //Properties
     budget,
+    budgetBalance,
     transactions,
+    detailedExpenseForChart,
     requesting,
     openModal,
     modalLoading,
@@ -72,6 +76,12 @@ const BudgetDetail = () => {
   const daysForSelect = monthDays.filter(
     (day) => (day.value as number) <= budget.end_date.getUTCDate()
   );
+  const colorToSpentPercentage =
+    budgetBalance.percentage_spent_amount >= 90
+      ? "#D32F2F"
+      : budgetBalance.percentage_spent_amount >= 60
+      ? "#FFD700"
+      : "#4CAF50";
 
   const datePeakerMinDate = () => {
     return formatterPickerDate(budget.start_date);
@@ -97,49 +107,44 @@ const BudgetDetail = () => {
       ) : (
         budget.id && (
           <>
-            <div className={styles.budgetDetailContainer}>
-              {/*Budget details*/}
-              <div className={styles.budgetContainer}>
-                <div className={styles.budgetDetails}>
-                  <div className={styles.budgetTitle}>
-                    <Title level={4}>{`${
-                      budget.name
-                    } - $${formattedAmount} - ${capitalizeFirstLetter(
-                      budget.status
-                    )}`}</Title>
-                    <Button
-                      className={styles.createBudgetButton}
-                      type="primary"
-                      icon={<PlusOutlined />}
-                      onClick={handleShowModal}
-                      disabled={budget.status !== "active" ? true : false}
-                    >
-                      Add expense
-                    </Button>
-                  </div>
-                  <Title level={5} style={{ marginTop: 0, marginBottom: 0 }}>
-                    {capitalizeFull(budget.category.name)}
-                  </Title>
-                  <Title level={5} style={{ marginTop: 0 }}>
-                    {formatedDate}
-                  </Title>
-                  <Text
-                    style={{ fontSize: 12, color: "gray" }}
-                    hidden={budget.status !== "active" ? false : true}
+            {/*Budget details*/}
+            <div className={styles.budgetContainer}>
+              <div className={styles.budgetDetails}>
+                <div className={styles.budgetTitle}>
+                  <Title level={4}>{`${
+                    budget.name
+                  } - $${formattedAmount} - ${capitalizeFirstLetter(
+                    budget.status
+                  )}`}</Title>
+                  <Button
+                    className={styles.createBudgetButton}
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={handleShowModal}
+                    disabled={budget.status !== "active" ? true : false}
                   >
-                    You can't create, update, or delete expenses in Budget that
-                    your status is pending or completed
-                  </Text>
+                    Add expense
+                  </Button>
                 </div>
-                <div className={styles.budgetExpensesContainer}>
-                  <Title level={4}>Expenses</Title>
-                </div>
+                <Title level={5} style={{ marginTop: 0, marginBottom: 0 }}>
+                  {capitalizeFull(budget.category.name)}
+                </Title>
+                <Title level={5} style={{ marginTop: 0 }}>
+                  {formatedDate}
+                </Title>
+                <Text
+                  style={{ fontSize: 12, color: "gray" }}
+                  hidden={budget.status !== "active" ? false : true}
+                >
+                  You can't create, update, or delete expenses in Budget that
+                  your status is pending or completed
+                </Text>
               </div>
-              {/*Budget charts*/}
-              <div className={styles.budgetChartContainer}>
-                <Title level={4}>Charts</Title>
+              <div className={styles.budgetExpensesContainer}>
+                <Title level={4}>Expenses</Title>
               </div>
             </div>
+
             {/*Transaction creation form Modal*/}
             <Modal
               open={openModal}
@@ -311,6 +316,32 @@ const BudgetDetail = () => {
                   transactionUpdateFunction={handleUpdateTransaction}
                   transactionDeleteFunction={handleDeleteTransaction}
                 />
+              </div>
+            )}
+            {/*Budget charts
+            They are rendered after the initial_amount 
+            has a value, as it will have a value
+            once the expense balance is obtained, so 
+            that the graph shows the statistics correctly. 
+            Previously, it was showing the initial values 
+            of 0 in the labels and never updated them*/}
+            {budgetBalance.initial_amount && (
+              <div className={styles.budgetChartContainer}>
+                <Title level={4}>Charts</Title>
+                <div className={styles.donutChartContainer}>
+                  <BalanceDonutChart
+                    totalAvailable={budgetBalance.remaining_amount}
+                    totalExpenses={budgetBalance.spent_amount}
+                  />
+                  <Title level={3} style={{ color: colorToSpentPercentage }}>
+                    Spent: {budgetBalance.percentage_spent_amount}%
+                  </Title>
+                </div>
+                {detailedExpenseForChart.length && (
+                  <div className={styles.barChartContainer}>
+                    <DetailedExpenseBarChart data={detailedExpenseForChart} />
+                  </div>
+                )}
               </div>
             )}
           </>

@@ -69,7 +69,6 @@ export const updateTransaction = async (
   updateTransactionDto: UpdateTransactionDto
 ) => {
   try {
-    console.log(updateTransactionDto);
     const { data } = await BudgetsApi.patch<ITransactionResponse>(
       `/transactions/${id_transaction}`,
       updateTransactionDto
